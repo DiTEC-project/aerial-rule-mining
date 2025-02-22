@@ -1,0 +1,16 @@
+{"time":"2025-01-29T10:33:37.876157681+01:00","level":"INFO","msg":"stream: starting","core version":"0.19.5","symlink path":"/home/erkan/Desktop/PhD/projects/associative_classification/wandb/run-20250129_103337-jcbwusin/logs/debug-core.log"}
+{"time":"2025-01-29T10:33:37.97907358+01:00","level":"INFO","msg":"created new stream","id":"jcbwusin"}
+{"time":"2025-01-29T10:33:37.979103549+01:00","level":"INFO","msg":"stream: started","id":"jcbwusin"}
+{"time":"2025-01-29T10:33:37.979163899+01:00","level":"INFO","msg":"handler: started","stream_id":"jcbwusin"}
+{"time":"2025-01-29T10:33:37.97916245+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"jcbwusin"}
+{"time":"2025-01-29T10:33:37.979169954+01:00","level":"INFO","msg":"sender: started","stream_id":"jcbwusin"}
+{"time":"2025-01-29T10:33:38.224503393+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-29T10:33:40.990873704+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-29T10:33:40.99430977+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-29T10:33:41.584107863+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-29T10:33:41.758782202+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-01-29T10:33:42.76231655+01:00","level":"INFO","msg":"stream: closing","id":"jcbwusin"}
+{"time":"2025-01-29T10:33:42.762348828+01:00","level":"INFO","msg":"handler: closed","stream_id":"jcbwusin"}
+{"time":"2025-01-29T10:33:42.762381006+01:00","level":"INFO","msg":"sender: closed","stream_id":"jcbwusin"}
+{"time":"2025-01-29T10:33:42.762379457+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"jcbwusin"}
+{"time":"2025-01-29T10:33:42.762475129+01:00","level":"INFO","msg":"stream: closed","id":"jcbwusin"}

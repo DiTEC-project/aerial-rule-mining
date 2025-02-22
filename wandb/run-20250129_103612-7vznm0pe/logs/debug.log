@@ -1,0 +1,25 @@
+2025-01-29 10:36:12,157 INFO    MainThread:207257 [wandb_init.py:setup_run_log_directory():637] Logging user logs to /home/erkan/Desktop/PhD/projects/associative_classification/wandb/run-20250129_103612-7vznm0pe/logs/debug.log
+2025-01-29 10:36:12,157 INFO    MainThread:207257 [wandb_init.py:setup_run_log_directory():638] Logging internal logs to /home/erkan/Desktop/PhD/projects/associative_classification/wandb/run-20250129_103612-7vznm0pe/logs/debug-internal.log
+2025-01-29 10:36:12,157 INFO    MainThread:207257 [wandb_init.py:init():756] calling init triggers
+2025-01-29 10:36:12,157 INFO    MainThread:207257 [wandb_init.py:init():761] wandb.init called with sweep_config: {}
+config: {'learning_rate': 0.005, 'batch_size': 64, 'epochs': 2, '_wandb': {}}
+2025-01-29 10:36:12,157 INFO    MainThread:207257 [wandb_init.py:init():789] starting backend
+2025-01-29 10:36:12,157 INFO    MainThread:207257 [wandb_init.py:init():793] sending inform_init request
+2025-01-29 10:36:12,158 INFO    MainThread:207257 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2025-01-29 10:36:12,158 INFO    MainThread:207257 [wandb_init.py:init():808] backend started and connected
+2025-01-29 10:36:12,159 INFO    MainThread:207257 [wandb_init.py:init():901] updated telemetry
+2025-01-29 10:36:12,160 INFO    MainThread:207257 [wandb_init.py:init():926] communicating run to backend with 90.0 second timeout
+2025-01-29 10:36:12,622 INFO    MainThread:207257 [wandb_init.py:init():984] starting run threads in backend
+2025-01-29 10:36:12,685 INFO    MainThread:207257 [wandb_run.py:_console_start():2385] atexit reg
+2025-01-29 10:36:12,685 INFO    MainThread:207257 [wandb_run.py:_redirect():2235] redirect: wrap_raw
+2025-01-29 10:36:12,685 INFO    MainThread:207257 [wandb_run.py:_redirect():2300] Wrapping output streams.
+2025-01-29 10:36:12,685 INFO    MainThread:207257 [wandb_run.py:_redirect():2325] Redirects installed.
+2025-01-29 10:36:12,685 INFO    MainThread:207257 [wandb_init.py:init():1026] run started, returning control to user process
+2025-01-29 10:36:13,328 INFO    MainThread:207257 [wandb_watch.py:_watch():71] Watching
+2025-01-29 10:36:14,734 INFO    MainThread:207257 [wandb_run.py:_finish():2110] finishing run erkankkarabulut-aerial/aerial/7vznm0pe
+2025-01-29 10:36:14,735 INFO    MainThread:207257 [wandb_run.py:_atexit_cleanup():2350] got exitcode: 0
+2025-01-29 10:36:14,735 INFO    MainThread:207257 [wandb_run.py:_restore():2332] restore
+2025-01-29 10:36:14,735 INFO    MainThread:207257 [wandb_run.py:_restore():2338] restore done
+2025-01-29 10:36:16,597 INFO    MainThread:207257 [wandb_run.py:_footer_history_summary_info():3963] rendering history
+2025-01-29 10:36:16,598 INFO    MainThread:207257 [wandb_run.py:_footer_history_summary_info():3995] rendering summary
+2025-01-29 10:36:16,599 INFO    MainThread:207257 [wandb_run.py:_footer_sync_info():3924] logging synced files
