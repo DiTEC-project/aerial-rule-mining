@@ -4,3 +4,5 @@ wandb
 venv
 __pycache__
 .pytest_cache
+src/algorithm/corels/data
+src/algorithm/corels/logs
