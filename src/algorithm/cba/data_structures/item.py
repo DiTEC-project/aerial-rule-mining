@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 class Item():
     """ Item class for representing attribute-value pair
     and one item in transaction or antecedent.

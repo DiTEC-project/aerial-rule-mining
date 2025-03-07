@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 from functools import reduce
 from .comparable_itemset import ComparableItemSet
 

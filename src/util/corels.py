@@ -1,7 +1,6 @@
 import subprocess
 import time
 import numpy as np
-import re
 
 
 def create_corels_input_files(rules, labels, dataset_name):
@@ -97,7 +96,6 @@ def parse_corels_rule_lists(rule_list_model_in_text):
             result.append(condition_list + [int(then_part.strip())])
         else:
             # Handle the default case
-            print(block)
             _, default_value = block.split('~')
             result.append([("default", int(default_value.strip()))])
 

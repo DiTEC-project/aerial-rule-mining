@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 import pandas as pd
 
 from src.algorithm.cba.data_structures.transaction_db import TransactionDB

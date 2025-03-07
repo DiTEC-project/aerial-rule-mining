@@ -1,6 +1,8 @@
-import time
+# Adapted from: https://github.com/jirifilip/pyARC
+
 import fim
 import logging
+import config
 
 from src.algorithm.cba.data_structures.car import ClassAssocationRule
 from src.algorithm.cba.data_structures.consequent import Consequent
@@ -8,7 +10,7 @@ from src.algorithm.cba.data_structures.antecedent import Antecedent
 from src.algorithm.cba.data_structures.item import Item
 from src.algorithm.cba.util.transactions import *
 
-from src.algorithm.aerial.aerial import Aerial
+from src.algorithm.aerial_plus.aerial_plus import AerialPlus
 from src.algorithm.classic_arm import ClassicARM
 from src.util.rule import *
 from src.util.ucimlrepo import *
@@ -48,7 +50,8 @@ def createCARs(rules):
     return CARs
 
 
-def generateCARs(transactionDB, algorithm="aerial", target_class=None, support=1, confidence=50, maxlen=10, **kwargs):
+def generateCARs(transactionDB, algorithm="aerial_plus", target_class=None, support=1, confidence=50, maxlen=10,
+                 **kwargs):
     """Function for generating ClassAssociationRules from a TransactionDB
 
     Parameters
@@ -75,25 +78,27 @@ def generateCARs(transactionDB, algorithm="aerial", target_class=None, support=1
     list of CARs
 
     """
-    if algorithm == "aerial":
-        aerial_input = transactiondb_to_dataframe(transactionDB)
-        aerial = Aerial(ant_similarity=0.5, cons_similarity=0.8, max_antecedents=maxlen - 1)
-        aerial.create_input_vectors(aerial_input)
-        # MLxtend's FP-Growth does not support constraint itemset mining while Aerial does (with target_class
+    if algorithm == "aerial_plus":
+        aerial_plus_input = transactiondb_to_dataframe(transactionDB)
+        aerial_plus = AerialPlus(ant_similarity=config.ANTECEDENT_SIMILARITY,
+                                 cons_similarity=config.CONSEQUENT_SIMILARITY, max_antecedents=config.MAX_ANTECEDENT)
+        aerial_plus.create_input_vectors(aerial_plus_input)
+        # MLxtend's FP-Growth does not support constraint itemset mining while aerial_plus does (with target_class
         # parameter. For fairness, we run both method without itemset constraint mining option and compare the
         # execution times.
         # Note that a set of comprehensive rule mining time experiments are conducted as part of rule quality
-        # experiments, and this is not the main experiment for execution time between FP-Growth and Aerial
-        aerial_training_time = aerial.train()
-        rules, ae_exec_time = aerial.generate_rules()
+        # experiments, and this is not the main experiment for execution time between FP-Growth and aerial_plus
+        aerial_plus_training_time = aerial_plus.train(epochs=config.EPOCHS, lr=config.LEARNING_RATE,
+                                                      batch_size=config.BATCH_SIZE)
+        rules, ae_exec_time = aerial_plus.generate_rules()
         filtered_rules = [
             rule for rule in rules
             if target_class in rule['consequent']
         ]
-        rules = aerial.calculate_basic_stats(filtered_rules, prepare_classic_arm_input(aerial_input))
-        exec_time = aerial_training_time + ae_exec_time
+        rules = aerial_plus.calculate_basic_stats(filtered_rules, prepare_classic_arm_input(aerial_plus_input))
+        exec_time = aerial_plus_training_time + ae_exec_time
         if rules:
-            rules = aerial_to_cba(rules)
+            rules = aerial_plus_to_cba(rules)
     else:
         fpgrowth = ClassicARM(min_support=0.3, min_confidence=0.8, algorithm="fpgrowth")
         fpgrowth_input = prepare_classic_arm_input(transactiondb_to_dataframe(transactionDB))
@@ -111,7 +116,7 @@ def generateCARs(transactionDB, algorithm="aerial", target_class=None, support=1
 
 
 def top_rules(transactions,
-              algorithm="aerial",
+              algorithm="aerial_plus",
               target_class=None,
               appearance={},
               target_rule_count=1000,
@@ -191,18 +196,20 @@ def top_rules(transactions,
             "Running apriori with setting: confidence={}, support={}, minlen={}, maxlen={}, MAX_RULE_LEN={}".format(
                 conf, support, minlen, maxlen, MAX_RULE_LEN))
 
-        if algorithm == "aerial":
-            aerial_input = transactiondb_to_dataframe(transactions)
-            aerial = Aerial(noise_factor=0.5, max_antecedents=maxlen - 1)
-            aerial.create_input_vectors(aerial_input)
-            aerial_training_time = aerial.train()
-            rules_current, ae_exec_time = aerial.generate_rules(target_class=target_class)
-            rules_current = aerial.calculate_basic_stats(rules_current,
-                                                         prepare_classic_arm_input(aerial_input))
-            rules_current = aerial_to_cba(rules_current)
+        # top rules function is not used in the Aerial+ experiments, see generateCARs function above
+        if algorithm == "aerial_plus":
+            aerial_plus_input = transactiondb_to_dataframe(transactions)
+            aerial_plus = AerialPlus(noise_factor=0.5, max_antecedents=config.MAX_ANTECEDENT)
+            aerial_plus.create_input_vectors(aerial_plus_input)
+            aerial_plus_training_time = aerial_plus.train(lr=config.LEARNING_RATE, epochs=config.EPOCHS,
+                                                          batch_size=config.BATCH_SIZE)
+            rules_current, ae_exec_time = aerial_plus.generate_rules(target_class=target_class)
+            rules_current = aerial_plus.calculate_basic_stats(rules_current,
+                                                              prepare_classic_arm_input(aerial_plus_input))
+            rules_current = aerial_plus_to_cba(rules_current)
         else:
             rules_current = fim.fpgrowth(transactions, supp=support, conf=conf, mode="o", report="sc",
-                                         appear=appearance, zmax=maxlen, zmin=minlen)
+                                         appear=appearance, zmax=config.MAX_ANTECEDENT + 1, zmin=minlen)
 
         rules = rules_current
 

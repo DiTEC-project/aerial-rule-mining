@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 from .appearance import Appearance
 from .transaction import Transaction, UniqueTransaction
 from . import Item

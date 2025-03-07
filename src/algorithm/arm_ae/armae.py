@@ -16,7 +16,7 @@ import time
 class ARMAE:
     def __init__(self, dataSize, learningRate=1e-2, maxEpoch=2,
                  batchSize=128, hiddenSize='dataSize', likeness=0.5, columns=[], isLoadedModel=False,
-                 IM=['support', 'confidence', 'zhangs_metric']):
+                 IM=['support', 'confidence']):
         self.arm_ae_training_time = 0
         self.exec_time = None
         self.dataSize = dataSize
@@ -73,7 +73,7 @@ class ARMAE:
     def computeMeasures(self, antecedent, consequent, data):
         # individual rule coverage of ARM-AE is not considered in the evaluation
         # instead, only the total data coverage of the final rules will be calculated
-        measures = {"support": 0, "confidence": 0, "zhangs_metric": 0, "coverage": 0}
+        measures = {"support": 0, "confidence": 0, "coverage": 0}
         self.dataset_coverage[antecedent] = 1
 
         if 'support' in self.IM:
@@ -99,17 +99,17 @@ class ARMAE:
             confidence = round(conf, 2)
             measures["confidence"] = confidence
         # the zhang's metric calculation is added to ARM-AE later on by us
-        if 'zhangs_metric' in self.IM:
-            PA = data[data.columns[antecedent]]
-            PA = np.sum(PA, axis=1)
-            PA = PA == len(antecedent)
-            PA = np.sum(PA)
-            PC = data[data.columns[antecedent]]
-            PC = np.sum(PC, axis=1)
-            PC = PC == len(antecedent)
-            PC = np.sum(PC)
-            zhangs = calculate_zhangs_metric(support, (PA / len(data)), (PC / len(data)))
-            measures["zhangs_metric"] = zhangs
+        # if 'zhangs_metric' in self.IM:
+        #     PA = data[data.columns[antecedent]]
+        #     PA = np.sum(PA, axis=1)
+        #     PA = PA == len(antecedent)
+        #     PA = np.sum(PA)
+        #     PC = data[data.columns[antecedent]]
+        #     PC = np.sum(PC, axis=1)
+        #     PC = PC == len(antecedent)
+        #     PC = np.sum(PC)
+        #     zhangs = calculate_zhangs_metric(support, (PA / len(data)), (PC / len(data)))
+        #     measures["zhangs_metric"] = zhangs
         return measures
 
     def computeSimilarity(self, allAntecedents, antecedentsArray, nbantecedent):
@@ -191,11 +191,10 @@ class ARMAE:
             for index in range(len(rule['consequent'])):
                 rule['consequent'][index] = data_columns[rule['consequent'][index]]
             rule_stats = {"antecedents": rule['antecedents'], "consequent": rule['consequent'],
-                          "support": rule['support'], "confidence": rule['confidence'],
-                          'zhangs_metric': rule['zhangs_metric']}
+                          "support": rule['support'], "confidence": rule['confidence']}
             formatted_rules.append(rule_stats)
 
         stats = calculate_average_rule_quality(formatted_rules)
         stats["coverage"] = sum(self.dataset_coverage) / len(data)
         return [len(formatted_rules), self.exec_time + self.arm_ae_training_time, stats['support'], stats["confidence"],
-                stats["coverage"], stats["zhangs_metric"]], formatted_rules
+                stats["coverage"]], formatted_rules

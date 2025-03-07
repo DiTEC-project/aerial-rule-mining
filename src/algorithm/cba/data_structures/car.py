@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 import collections
 
 class ClassAssocationRule():

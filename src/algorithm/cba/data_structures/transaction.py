@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 from .comparable_itemset import ComparableItemSet
 from .item import Item
 import pandas as pd

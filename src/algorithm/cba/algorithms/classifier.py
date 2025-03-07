@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 import pandas as pd
 from functools import reduce
 
@@ -17,8 +19,6 @@ class Classifier:
 
         self.default_rule = None
 
-
-
     def test_transactions(self, txns):
         """Takes a TransactionDB and outputs
         accuracy of the classifier
@@ -27,8 +27,7 @@ class Classifier:
         actual = txns.classes
 
         return accuracy_score(pred, actual)
-    
-        
+
     def predict(self, datacase):
         """predicts target class of one 
         datacase
@@ -36,18 +35,18 @@ class Classifier:
         for rule in self.rules:
             if rule.antecedent <= datacase:
                 return rule.consequent.value
-            
+
         return self.default_class
-        
+
     def predict_all(self, dataset):
         """predicts target class of an array
         of datacases
         """
         predicted = []
-        
+
         for datacase in dataset:
             predicted.append(self.predict(datacase))
-            
+
         return predicted
 
     def predict_matched_rule(self, datacase):
@@ -68,13 +67,11 @@ class Classifier:
         confidence, support and length)
         """
         matched_rules = []
-        
+
         for datacase in dataset:
             matched_rules.append(self.predict_matched_rule(datacase))
-            
+
         return matched_rules
-
-
 
     def predict_probability(self, datacase):
         """predicts target class probablity of one 
@@ -83,7 +80,7 @@ class Classifier:
         for rule in self.rules:
             if rule.antecedent <= datacase:
                 return rule.confidence
-            
+
         return self.default_class_confidence
 
     def predict_probability_all(self, dataset):
@@ -91,18 +88,17 @@ class Classifier:
         of an array of datacases
         """
         predicted = []
-        
+
         for datacase in dataset:
             predicted.append(self.predict_probability(datacase))
-            
-        return predicted
 
+        return predicted
 
     def inspect(self):
         """inspect uses pandas DataFrame to
         display information about the classifier
         """
-        
+
         dictionary = {
             "lhs": [],
             "rhs": [],
@@ -128,12 +124,10 @@ class Classifier:
         dictionary["length"].append(1)
         dictionary["id"].append(None)
 
-
         rules_df = pd.DataFrame(dictionary)
         rules_df = rules_df[["lhs", "rhs", "confidence", "support", "length", "id"]]
 
         return rules_df
-
 
 
 def accuracy_score(actual, predicted):

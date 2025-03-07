@@ -4,15 +4,15 @@ from src.util.corels import *
 from tqdm import tqdm
 
 
-def aerial_to_cba(aerial_rules):
+def aerial_plus_to_cba(aerial_plus_rules):
     """
-    Convert the rules learned by our aerial method to CBA format
+    Convert the rules learned by our aerial_plus method to CBA format
     :param target_class:
-    :param aerial_rules:
+    :param aerial_plus_rules:
     :return:
     """
     cba_rules = []
-    for rule in aerial_rules:
+    for rule in aerial_plus_rules:
         consequent = rule["consequent"].replace("__", ":=:")
         antecedents = tuple([ant.replace("__", ":=:") for ant in rule["antecedents"]])
         cba_rules.append((consequent, antecedents, rule['support'], rule['confidence']))
@@ -64,12 +64,14 @@ def fpg_to_corels(freq_items, labels, transactions, label_descriptions):
             new_itemset[key] = value
         formatted_freq_itemsets.append(new_itemset)
 
+    # the function below suppresses the progress output by the partial function below
     partial_process_item = partial(create_corels_freq_items_input, transactions=transactions)
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         # Use executor.map with tqdm for progress tracking
         freq_items_corels_format = list(
-            tqdm(executor.map(partial_process_item, formatted_freq_itemsets), total=len(formatted_freq_itemsets))
+            tqdm(executor.map(partial_process_item, formatted_freq_itemsets), total=len(formatted_freq_itemsets)
+                 , disable=True)
         )
 
     return freq_items_corels_format, labels_corels_format, time.time() - start

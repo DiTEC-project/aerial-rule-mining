@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 from .rule_algorithm import RuleBuilderAlgorithm
 from .classifier import Classifier
 from src.algorithm.cba.data_structures.car import ClassAssocationRule

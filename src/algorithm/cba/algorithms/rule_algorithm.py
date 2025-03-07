@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 from collections import Counter
 
 from src.algorithm.cba.data_structures.car import ClassAssocationRule

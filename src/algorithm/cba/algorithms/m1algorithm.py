@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 import collections
 from .rule_algorithm import RuleBuilderAlgorithm
 from .classifier import Classifier

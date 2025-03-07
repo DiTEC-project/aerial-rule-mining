@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 class ComparableItemSet:
     """ ComparableItemSet is a common ancestor
     for Antecedent and Transaction class so that

@@ -19,10 +19,9 @@ class OptimizationARM:
         if len(rules) == 0:
             return [0, run_time, 0, 0, 0, 0], rules
         coverage = self.calculate_coverage(rules, transactions)
-        support, confidence, zhangs = \
-            rules.mean("support"), rules.mean("confidence"), rules.mean("zhang")
+        support, confidence = rules.mean("support"), rules.mean("confidence")
         rules = self.reformat_rules(rules)
-        return [len(rules), run_time, support, confidence, coverage, zhangs], rules
+        return [len(rules), run_time, support, confidence, coverage], rules
 
     @staticmethod
     def calculate_coverage(rules, dataset):

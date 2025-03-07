@@ -38,14 +38,13 @@ def calculate_average_rule_quality(rules):
     stats = []
     for rule in rules:
         stats.append([
-            rule["support"], rule["confidence"], rule["zhangs_metric"]
+            rule["support"], rule["confidence"]
         ])
 
     stats = pd.DataFrame(stats).mean()
     stats = {
         "support": stats[0],
-        "confidence": stats[1],
-        "zhangs_metric": stats[2]
+        "confidence": stats[1]
     }
     return stats
 
@@ -131,15 +130,15 @@ def evaluate_rules(association_rules, exec_time, training_time):
     confidence_list = []
     # yulesq_metric_list = []
     # interestingness_score_list = []
-    zhangs_metric_list = []
+    # zhangs_metric_list = []
     coverage_list = []
     for rule in association_rules:
         support_list.append(rule['support'])
         confidence_list.append(rule['confidence'])
         # yulesq_metric_list.append(rule['yulesq'])
         # interestingness_score_list.append(rule['interestingness'])
-        zhangs_metric_list.append(rule['zhangs_metric'])
+        # zhangs_metric_list.append(rule['zhangs_metric'])
         coverage_list.append(rule['coverage'])
 
     return [len(association_rules), training_time, exec_time, mean(support_list), mean(confidence_list),
-            mean(coverage_list), mean(zhangs_metric_list)]
+            mean(coverage_list)]

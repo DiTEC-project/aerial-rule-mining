@@ -8,7 +8,8 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.multiclass import check_classification_targets, unique_labels
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
-from src.algorithm.aerial.aerial import Aerial
+import config
+from src.algorithm.aerial_plus.aerial_plus import AerialPlus
 from src.algorithm.brl.brl_util import (
     default_permsdic, preds_d_t, run_bdl_multichain_serial, merge_chains, get_point_estimate, get_rule_rhs
 )
@@ -104,7 +105,7 @@ class BayesianRuleListClassifier(BaseEstimator, RuleList, ClassifierMixin):
                 feature_names = ["ft" + str(i + 1) for i in range(len(X[0]))]
         self.feature_names = feature_names
 
-    def fit(self, X, X_nonencoded, y, feature_names: list = None, verbose=False, algorithm="aerial"):
+    def fit(self, X, X_nonencoded, y, feature_names: list = None, verbose=False, algorithm="aerial_plus"):
         """Fit rule lists to data.
         Note: The BRL algorithm requires numeric features to be discretized into bins
             prior to fitting. See imodels.discretization or sklearn.preprocessing for
@@ -129,7 +130,7 @@ class BayesianRuleListClassifier(BaseEstimator, RuleList, ClassifierMixin):
         Returns
         -------
         self : returns an instance of self.
-        :param X_nonencoded: for aerial
+        :param X_nonencoded: for aerial_plus
         """
         self.seed()
 
@@ -149,13 +150,16 @@ class BayesianRuleListClassifier(BaseEstimator, RuleList, ClassifierMixin):
         self.feature_placeholders = np.array(list(self.feature_dict_.keys()))
         self.feature_names = np.array(list(self.feature_dict_.values()))
         X_df = pd.DataFrame(X, columns=self.feature_placeholders)
-        if algorithm == "aerial":
-            aerial = Aerial(ant_similarity=0.4, max_antecedents=self.maxcardinality - 1)
-            aerial.create_input_vectors(X_nonencoded)
-            aerial_training_time = aerial.train()
-            itemsets, ae_exec_time = aerial.generate_frequent_itemsets()
+        if algorithm == "aerial_plus":
+            aerial_plus = AerialPlus(ant_similarity=config.ANTECEDENT_SIMILARITY,
+                                     cons_similarity=config.CONSEQUENT_SIMILARITY,
+                                     max_antecedents=config.MAX_ANTECEDENT)
+            aerial_plus.create_input_vectors(X_nonencoded)
+            aerial_plus_training_time = aerial_plus.train(epochs=config.EPOCHS, lr=config.LEARNING_RATE,
+                                                          batch_size=config.BATCH_SIZE)
+            itemsets, ae_exec_time = aerial_plus.generate_frequent_itemsets()
             # imodels implementation of the BRL uses X_# format to name the columns, with 1 underscore
-            # Aerial only uses {key}__{value} format to encode column names.
+            # aerial_plus only uses {key}__{value} format to encode column names.
             # So the step below ignore the underscores and matches the column names
             feature_dict_inversed = {v.replace("_", ""): k for k, v in self.feature_dict_.items()}
             for set_index in range(len(itemsets)):
@@ -163,16 +167,15 @@ class BayesianRuleListClassifier(BaseEstimator, RuleList, ClassifierMixin):
                     itemsets[set_index][item_index] = feature_dict_inversed[
                         itemsets[set_index][item_index].replace("_", "")]
             self.average_itemset_support = calculate_average_support(itemsets, X_df)
-            self.rule_mining_time = aerial_training_time + ae_exec_time
+            self.rule_mining_time = aerial_plus_training_time + ae_exec_time
         else:
             start = time.time()
-            itemsets, average_support = extract_itemsets(X_df, min_support=self.minsupport,
+            itemsets, average_support = extract_itemsets(X_df.astype(bool), min_support=self.minsupport,
                                                          max_cardinality=self.maxcardinality,
                                                          verbose=verbose)
             self.rule_mining_time = time.time() - start
             self.average_itemset_support = average_support
 
-        print("# itemsets", len(itemsets), self.rule_mining_time, self.average_itemset_support)
         self.freq_itemsets_count = len(itemsets)
         start_time = time.time()
         # Now form the data-vs.-lhs set

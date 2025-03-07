@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 import time
 
 from src.algorithm.cba.algorithms.m1algorithm import M1Algorithm

@@ -45,15 +45,13 @@ class ClassicARM:
         coverage = self.calculate_dataset_coverage(rules, dataset)
         reformatted_rules = self.reformat_rules(rules)
         stats = calculate_average_rule_quality(reformatted_rules)
-        return [len(rules), exec_time, stats['support'], stats["confidence"], coverage,
-                stats["zhangs_metric"]], reformatted_rules
+        return [len(rules), exec_time, stats['support'], stats["confidence"], coverage], reformatted_rules
 
     def reformat_rules(self, rules):
         reformatted_rules = []
         for rule_index, rule in rules.iterrows():
             new_rule = {'antecedents': list(rule['antecedents']), 'consequent': list(rule['consequents']),
-                        'support': rule['support'], 'confidence': rule['confidence'],
-                        'zhangs_metric': rule["zhangs_metric"]}
+                        'support': rule['support'], 'confidence': rule['confidence']}
             reformatted_rules.append(new_rule)
         return reformatted_rules
 
@@ -111,4 +109,4 @@ class ClassicARM:
         stats = calculate_average_rule_quality(rule_stats)
         stats["coverage"] = sum(rule_coverage) / num_transactions
 
-        return [len(rules), exec_time, stats['support'], stats["confidence"], stats["coverage"], stats["zhangs_metric"]]
+        return [len(rules), exec_time, stats['support'], stats["confidence"], stats["coverage"]]

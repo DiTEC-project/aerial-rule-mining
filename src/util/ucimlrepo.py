@@ -1,7 +1,6 @@
 """
 This script includes helper functions for processing UCI ML repository datasets
 """
-import pandas
 import pandas as pd
 import numpy as np
 

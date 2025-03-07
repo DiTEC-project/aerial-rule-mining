@@ -1,3 +1,5 @@
+# Adapted from: https://github.com/jirifilip/pyARC
+
 class Appearance:
     """Appearance represents an easy way to get an appearance 
     dictionary for functions from fim package.
