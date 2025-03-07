@@ -170,7 +170,7 @@ class ARMAE:
 
     def reformat_rules(self, data, data_columns):
         """
-        Karabulut:
+        Aerial+:
         ARM-AE generates rules in the form of indexes, e.g. feature1 implies feature2
         This method added to ARM-AE code to reformat the rules and use feature names instead
         In addition, it also calculates other rule quality measures besides support and confidence
