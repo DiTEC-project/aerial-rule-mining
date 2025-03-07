@@ -3,6 +3,7 @@ This Python scripts runs Aerial+ and the baselines as part of rule-based interpr
 Check out the config.py for the parameters of each algorithm before running
 """
 
+import pandas
 import config
 import warnings
 from ucimlrepo import fetch_ucirepo
