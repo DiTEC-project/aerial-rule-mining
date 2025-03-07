@@ -118,7 +118,8 @@ The results are saved into a `.csv` file with the name of the UCI dataset:
 ![rule_quality_experiments_sample_csv_output](rule_quality_experiments_sample_csv_output.png)
 
 4. **Running the downstream classification experiments**: in the main folder of this repository, run `python3 classification_experiments.py`.
-This script runs all three classification algorithms with Aerial+ and FP-Growth as done in the paper, on _Congressional Voting Records_ dataset. 
+If you receive a `Permission denied: './corels'` error message, make sure that `src/algorithm/corels/src/corels` is executable
+by running `chmod +x src/algorithm/corels/src/corels`. This script runs all three classification algorithms with Aerial+ and FP-Growth as done in the paper, on _Congressional Voting Records_ dataset. 
 Line 26 of the [classification_experiments.py](classification_experiments.py) can be updated to include any other dataset from the UCI ML repository,
 e.g., `mushroom = fetch_ucirepo(id=73)` and `datasets += [(mushroom, "poisonous", {'e': 0, 'p': 1})]` to include mushroom dataset
 with class labels and categories for classification.
