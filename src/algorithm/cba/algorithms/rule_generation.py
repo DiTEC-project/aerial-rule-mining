@@ -1,6 +1,5 @@
 # Adapted from: https://github.com/jirifilip/pyARC
 
-import fim
 import logging
 import config
 
@@ -19,6 +18,8 @@ from src.util.ucimlrepo import *
 def createCARs(rules):
     """Function for converting output from fim.arules or fim.apriori
     to a list of ClassAssociationRules
+
+    UPDATE (for Aerial+): we used Mlxtend instead of the fim package
 
     Parameters
     ----------
@@ -208,10 +209,14 @@ def top_rules(transactions,
                                                               prepare_classic_arm_input(aerial_plus_input))
             rules_current = aerial_plus_to_cba(rules_current)
         else:
-            rules_current = fim.fpgrowth(transactions, supp=support, conf=conf, mode="o", report="sc",
-                                         appear=appearance, zmax=config.MAX_ANTECEDENT + 1, zmin=minlen)
-
-        rules = rules_current
+            fpgrowth = ClassicARM(min_support=0.3, min_confidence=0.8, algorithm="fpgrowth")
+            fpgrowth_input = prepare_classic_arm_input(transactiondb_to_dataframe(transactions))
+            fpg_rules, exec_time = fpgrowth.mine_rules(fpgrowth_input, antecedents=maxlen - 1, rule_stats=False)
+            filtered_rules = [
+                rule for rule in fpg_rules
+                if len(rule['consequent']) == 1 and any(target_class in item for item in rule['consequent'])
+            ]
+            rules = fpgrowth_to_cba(filtered_rules)
 
         rule_count = len(rules)
 
