@@ -7,6 +7,8 @@ Data_".
 This document is a brief guideline describing Aerial+, datasets and the baselines used in the experiments
 and how to run the experiments
 
+**New Python library.** Please also see the Python library of Aerial+ (PyAerial): [https://github.com/DiTEC-project/pyaerial](https://github.com/DiTEC-project/pyaerial).
+
 ### Table of Contents
 
 1. [About](#about)
